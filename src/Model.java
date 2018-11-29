@@ -2,12 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+//The model is the central part of the MVC architectural pattern, holding the game's data structure, manages the logic and holds the rules for the application
 public class Model {
 	
-    private char[][] blocks;
-    private char status;
-    private char player;
-    private int movesLeft;
+    private char[][] blocks;		//Main data structure, holds the board state
+    private char player;		//Who's turn it is, cna be 'X' or 'Y'
+    private int movesLeft;		//How many moves are left, 0 means game has ended
 	private View visualization;
 	
 	public Model(View arg) {
@@ -30,65 +30,66 @@ public class Model {
 		visualization.makeVisable();
 	}
 	
-	//For the controller to update the board
+	//Updates the board
 	public void blockClaimed( int x, int y ){
 		this.blocks[x][y] = player;
 		this.visualization.updateBoard( x, y, player);
 	}
 	
-	//When a user ends their turn, the controller will fire this. Checks to see if someone won, and then as long as there are moves left, it ends the game
+	//Command to end the turn and advance the game state state
+	//Also checks for game-end conditions
 	public void endTurn(){
-		
-		if( this.isFinished() ) {
-			if( this.player == 'X' ){
-				visualization.setMessage(2);
-				this.movesLeft = 0;
-				return;
-			}
-			visualization.setMessage(3);
-			this.movesLeft = 0;
-			return;
-		}
-		
-		
-		
-		//Draw
-		if( this.movesLeft == 1 ){
-			this.visualization.setMessage(4);
-			this.movesLeft = 0;
-			return;
-		}
 		
 		this.movesLeft--;
 		
-		//Swap player, and tell the view we are swapping player
+		//Check for victory
+		if( this.isFinished() ) {                    //isFinished returns true if a win condition exists
+			if( this.player == 'X' ){
+				visualization.setMessage(2); //2 = X win message
+				this.movesLeft = 0;          //Locks board
+				return;
+			}
+			visualization.setMessage(3);	     //3 = O win message
+			this.movesLeft = 0;                  //Locks board
+			return;
+		}
+		
+		//Draw
+		if( this.movesLeft == 0 ){
+			this.visualization.setMessage(4);    //4 = Draw message
+			return;
+		}
+		
+		
+		
+		//Swap player, and tell the view the new look it should have
 		if( this.player == 'X'){
-			this.visualization.setMessage(1);
+			this.visualization.setMessage(1);    //O = O turn message
 			this.player = 'O';
 			return;
 		}
-		this.visualization.setMessage(0);
+		this.visualization.setMessage(0);            //1 = X turn message
 		this.player = 'X';
 	}
 	
 	//Returns true if the board has been won
 	private boolean isFinished(){ 
 	
-		//Rows
+		//Check for horizontal wins
 		for( int row = 0; row < 3; row++ ){
 			if( this.blocks[row][0] == this.blocks[row][1] && this.blocks[row][0] == this.blocks[row][2] && this.blocks[row][0] != ' '){
 				return true;
 			}
 		}
 		
-		//Cols
+		//Check for vertical wins
 		for (int col = 0; col < 3; col++) {
 			if (this.blocks[0][col] == this.blocks[1][col] && this.blocks[0][col] == this.blocks[2][col] && this.blocks[0][col] != ' ') {
 				return true;
 			}
 		}
 		
-		//Diags
+		//Check for diagonal wins
 		if (this.blocks[0][0] == this.blocks[1][1] && this.blocks[0][0] == this.blocks[2][2] && this.blocks[0][0] != ' '|| this.blocks[2][0] == this.blocks[1][1] && this.blocks[2][0] == this.blocks[0][2] && this.blocks[2][0] != ' '){
 			return true;
 		}
@@ -100,13 +101,13 @@ public class Model {
 	
 	
 	//Reset the game
-    public void resetGame() {
+    	public void resetGame() {
 		this.visualization.clearBoard();
 		this.generateBoard();
-        this.player = 'X';
-        this.movesLeft = 9;
-        this.visualization.setMessage(0);
-    }
+        	this.player = 'X';
+        	this.movesLeft = 9;
+        	this.visualization.setMessage(0);
+    	}
 	
 	public char getPlayer(){ return this.player; }
 	
@@ -124,7 +125,7 @@ public class Model {
 	}
 	
 	//Test method for playing without view
-	public void testEndTurn(){
+	public void noViewEndTurn(){
 		if( this.isFinished() ) {
 			if( this.player == 'X' ){
 				this.movesLeft = 0;
