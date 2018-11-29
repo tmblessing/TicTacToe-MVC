@@ -1,5 +1,11 @@
 # TicTacToe
-TicTacToe.java is a basic Java implementation of the well-known Tic Tac Toe game.
+TicTacToe.java is a MVC Java implementation of the well-known tic tac toe game
+
+Model.java is the core of the game, and holds the main data structure, logic, and rules needed for the game
+
+View.java holds all the GUI elements for the game. The model reports the board state to it, and any clicks made on it are reported to the controller
+
+Controller.java accepts inputs from the user and has logic that converts the inputs into commands for the model
 
 ### How to build and test (from Terminal):
 
@@ -14,7 +20,7 @@ TicTacToe.java is a basic Java implementation of the well-known Tic Tac Toe game
 ### How to run (from Terminal):
 
 1. After building the project (i.e., running `ant`), run:
-   `java -cp bin TicTacToe`
+   `java -cp bin Main`
 
 ### How to clean up (from Terminal):
 
