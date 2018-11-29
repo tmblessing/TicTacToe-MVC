@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+//The view controls all GUI elements of the architecture. 
+//The view displays the game state it receives from the model, and reports any IO that is made in the GUI to the controller
 public class View{
 	
 	private JFrame gui;
@@ -10,8 +12,8 @@ public class View{
 	private JPanel options;
 	private JPanel messages;
 	private JButton reset;
-    private JTextArea playerturn;
-	private JButton[][] buttons;
+    	private JTextArea playerturn;
+	private JButton[][] buttons;	//Data structure holding the GUI board spaces
 	private Controller cont;
 	
 	public View(){
@@ -43,14 +45,17 @@ public class View{
 		messages.add(playerturn);
 		playerturn.setText("Player 1 to play 'X'");
 		
+		//If reset is pressed, report that action to the controller
 		reset.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                cont.resetPressed();
-            }
-        });
+            		public void actionPerformed(ActionEvent e) {
+                		cont.resetPressed();
+            		}
+        	});
 	}
 
-	//Create gui objects a cell at the specified cord
+	//Create a GUI item for a board space at the specified row and column
+	//The model will call this for each space on it's board. 
+	//The GUI doesn't know how big the board is, the model handles that
 	public JButton newCell(int row, int column){
 		this.buttons[row][column] = new JButton();
 		this.buttons[row][column].setPreferredSize(new Dimension(75,75));
